@@ -5,3 +5,4 @@
 
  * PHP >= 5.7
  * Vue JS >= 2.0
+ * Redis
