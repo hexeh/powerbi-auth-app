@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+	<meta name = "COPYRIGHT" content = "&copy; 2017 WOW SO MUCH COPYRIGHTS">
+	<meta name = "ROBOTS" content = "NOINDEX,NOFOLLOW">
+	<link id=favicon rel="apple-touch-icon" href="//fav.png" />
+	<link rel="shortcut icon" href="//fav_32px.png" type="image/x-icon" />
+	<title>Template.PBI.Auth</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans+Condensed:300|Exo+2|Fira+Sans+Condensed:300|Poiret+One" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="css/bi.reportpage.css">
+	<script src = "js/jquery-3.1.1.min.js"></script>
+	<script src = "js/js.cookie.js"></script>
+	<script src = "js/powerbi.js"></script>
+	<script src = "js/powerbi-models.js"></script>
+</head>
+<body>
+<!-- Body -->
+<div id = "preloader">
+	<img src="images/icons/preloader.png">
+</div>
+</div>
+<div id="dashboard-page">
+	<div class = "root">
+		<div class = "stats__main__header">
+			<div class = "image__logo__header"></div>
+			<div class = "message__welcome__header" v-show="activeState >= 0">
+				<p v-model="client_name"><span class = "client_info">User: <b>{{ client_name }}</b></span>
+					<a class = "logout_button__header" href="">
+						<span v-model="client_name" v-on:click = "logoutMe">LOGOUT</span>
+					</a>
+				</p>
+			</div>
+		</div>
+		<div class = "stats__main__body">
+			<div class = "unit auth_form" data-step = "-1" v-show="activeState === -1">
+				<form id = "login_form" v-on:submit.prevent = "authMe($event)">
+					<input type = "text" name = "login" placeholder = "Login" v-model = "u_login"></input>
+					<input type = "password" name = "pwd" placeholder = "Password" v-model = "u_pwd"></input>
+					<span class = "checkbox__persist">
+						<input type="checkbox" name="persist_here" value="Yes" style = "width: 20px;height: 20px;margin: auto 5px auto 0px;">
+						<label for = "persist_here">REMEMBER ME</label>
+					</span>
+					<input type = "submit" name = "go" value = "Начать"></input>
+				</form>
+			</div>
+			<div class = "unit" v-show = "activeState === 1">
+				<div id = "reportControls">
+					<div class = 'report__pages__holder' style = "display: none;">
+						<span>Report Pages:</span>
+						<ul>
+							<li v-for = "i in reportPages" v-on:click = 'setReportPage(i.name, $event)' v-bind:id = "'bi_report_' + i.name">{{i.displayName}}</li>
+						</ul>
+					</div>
+					<div style = "display: flex; margin-left: auto;">
+						<a class = 'report__actions' id = "switch-report-mode" href="javascript:void(0)" v-on:click= = "switchModes()">П</a>
+						<a class = 'report__actions' id = "print-report" href="javascript:void(0)" onclick = "window.report.print()">П</a>
+						<a class = 'report__actions' id = "fullscreen-report" href="javascript:void(0)" onclick = "window.report.fullscreen()">Э</a>	
+					</div>
+				</div>				
+				<div id = "embedContainer" style = "overflow: hidden;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id = "auth_info" style = "display: none; overflow: hidden;"></div>
+<!-- Scripts -->
+<script src="js/vue.min.js"></script>
+<script src="js/pbi.extended.app.js"></script>
+<script>
+	$(document).ready( () => {
+		Vue.set(auth_app, 'subject', 'APP_SUBJECT');
+	});
+</script>
+</body>
+</html>
