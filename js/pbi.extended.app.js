@@ -3,24 +3,24 @@ function deviceType(){
 	return /iPad/.test(navigator.userAgent)?"t":/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Silk/.test(navigator.userAgent)?"m":"d";
 }
 function shakeForm(form, input)
+{
+	let l = 20;	
+	for(let i = 0; i < 5; i++)
+	{ 
+		$(form).find(input).css('border', '1px solid rgba(244,67,54,1)')	
+		$(form).animate(
+			{ 
+				'margin-top': '+=' + ( l = -l ) + 'px',
+				'margin-bottom': '-=' + l + 'px'
+			}, 100, function()
 			{
-				let l = 20;	
-				for(let i = 0; i < 5; i++)
-				{ 
-					$(form).find(input).css('border', '1px solid rgba(244,67,54,1)')	
-					$(form).animate(
-					{ 
-						'margin-top': '+=' + ( l = -l ) + 'px',
-						'margin-bottom': '-=' + l + 'px'
-					}, 100, function()
-					{
-						$(form).css('cssText', 'margin: 5% auto !important');
-						setTimeout(function(){
-							$(form).find(input).css('border', 'none')
-						}, 1000);
-					});	
-				}
-			}; 
+				$(form).css('cssText', 'margin: 5% auto !important');
+				setTimeout(function(){
+					$(form).find(input).css('border', 'none')
+				}, 1000);
+			});	
+	}
+}; 
 var auth_app = new Vue({
 	el: 	'#dashboard-page',
 	data: 
