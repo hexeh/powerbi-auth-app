@@ -14,10 +14,8 @@ var auth_app = new Vue({
 		currentMode: 'view',
 		activeState: -1,
 		reportId: '',
-		objectsGeneric: [],
 		current_empl_info: '',
 		savedReports: [],
-		existedLogins: [],
 		initialFilters: [],
 		groupId: 'me',
 		logger: [],
@@ -25,8 +23,6 @@ var auth_app = new Vue({
 		is_editor: true,
 		is_creator: false,
 		deviceType: deviceType(),
-		grantsFrame: 'Список сотрудников',
-		objectsFrame: 'Доступные объекты',
 		reportPages: []
 	},
 	created: function()
