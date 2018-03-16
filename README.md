@@ -3,18 +3,11 @@
 
 ### App Config
 
-**Redirect URI** of an App should be URI of described HTML-page
-**Redis** should store webapp-user-specific info in format (key for info is `webapp_subject:webapp_login`):
-```json
-{
-  "login": "WEBAPP_USER_LOGIN",
-  "password": "WEBAPP_USER_PASSWORD",
-  "client_name": "WEBAPP_USER_NAME",
-  "reportId": "PBI_ASSOCIATED_REPORTID",
-  "groupId": "PBI_ASSOCIATED_GROUPID"
-}
-```
-One can extend object with user-specific info, for example, whether user have edit permissions for report or not.
+1. Create DB and tables from create_db.sql
+2. Enter data to table
+3. Create web directory with path equal to point name in DB table.
+4. Copy files to web directory.
+5. Don't forget to fill assets.
 
 `powerbi.js` located [here](https://github.com/Microsoft/PowerBI-JavaScript/tree/master/dist)
 
@@ -22,6 +15,7 @@ One can extend object with user-specific info, for example, whether user have ed
 
  * PHP >= 5.7
  * Vue JS >= 2.0
- * Redis
+ * MySQL server
  * JQuery >= 3.0.0
  * [Cookie JS](https://github.com/js-cookie/js-cookie)
+ * [Moment JS](https://github.com/moment/moment/)
