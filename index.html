@@ -4,75 +4,109 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
-	<meta name = "COPYRIGHT" content = "&copy; 2017 WOW SO MUCH COPYRIGHTS">
+	<meta name = "COPYRIGHT" content = "&copy; 2018 My Perfect App">
 	<meta name = "ROBOTS" content = "NOINDEX,NOFOLLOW">
-	<link id=favicon rel="apple-touch-icon" href="//fav.png" />
-	<link rel="shortcut icon" href="//fav_32px.png" type="image/x-icon" />
-	<title>Template.PBI.Auth</title>
+	<link id=favicon rel="apple-touch-icon" href="assets/images/icons/logo.png" />
+	<link rel="shortcut icon" href="assets/images/icons/logo.png" type="image/x-icon" />
+	<title>PIK | Artics Internet Solutions</title>
 	<link href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans+Condensed:300|Exo+2|Fira+Sans+Condensed:300|Poiret+One" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="css/bi.reportpage.css">
-	<script src = "js/jquery-3.1.1.min.js"></script>
-	<script src = "js/js.cookie.js"></script>
-	<script src = "js/powerbi.js"></script>
+	<link rel="stylesheet" type="text/css" href="assets/css/pbi.app.css">
+	<link href="assets/css/datepicker.min.css" rel="stylesheet" type="text/css">
+	<script src = "assets/js/jquery-3.1.1.min.js"></script>
+	<script src = "assets/js/vanilla-tilt.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+	<script type="text/javascript">
+		var appCookies = Cookies.noConflict();
+	</script>
+	<script src = "assets/js/powerbi.min.js"></script>
+	<script src = "assets/js/jquery.powerbi.js"></script>
+	<script src = "assets/js/powerbi.js"></script>
+	<script src = "assets/js/powerbi-models.js"></script>
+	<script src = "assets/js/draggabilly.pkgd.min.js"></script>
+	<script src = "assets/js/datepicker.min.js"></script>
+	<script src = "assets/js/datepicker.en.js"></script>
 </head>
 <body>
 <!-- Body -->
 <div id = "preloader">
-	<img src="images/icons/preloader.png">
+	<img src="assets/images/icons/preloader.png">
 </div>
 </div>
 <div id="dashboard-page">
 	<div class = "root">
 		<div class = "stats__main__header">
-			<div class = "image__logo__header"></div>
-			<div class = "message__welcome__header" v-show="activeState >= 0">
-				<p v-model="client_name"><span class = "client_info">User: <b>{{ client_name }}</b></span>
-					<a class = "logout_button__header" href="">
-						<span v-model="client_name" v-on:click = "logoutMe">LOGOUT</span>
+			<!--div class = "image__logo__header"></div-->
+			<img src="assets/images/icons/artics.png" alt = "My Perfect Logo" class = "image__logo__header">
+			<div class = "message__welcome__header" v-show="activeScreen == 'report'">
+				<span class = 'welcome__header__buttons'>
+					<a class = "report__button__generic report__button__logout" href="javascript:void(0)" style="flex-grow: 2;">
+						<span v-on:click = "logoutMe()">Выйти из системы</span>
 					</a>
-				</p>
+				</span>
+				<span class = 'welcome__header__info' style = "margin: 10px 0;">
+					<span v-model="client_name" class = "client_info" style = "margin-top: 10px;">
+						<span style = 'grid-column: 1; grid-row: 1;'>Доброго {{partOfDay}}, </span>
+						<b style = 'grid-column: 2; grid-row: 1;'>{{ userData.name }} {{ userData.lastname }}</b>
+					</span>
+					<span class = "client_info">
+						<span style = 'grid-column: 1; grid-row: 2;'>Роль:</span>
+						<b v-if = 'userData.mode == "admin" || userData.mode == "superuser"' style = 'grid-column: 2; grid-row:2;'>Администратор</b>
+						<b v-if = 'userData.mode == "operator"'style = 'grid-column: 2; grid-row: 2;'>Специалист</b>
+						<b v-if = 'userData.mode == "client"' style = 'grid-column: 2; grid-row: 2;'>Сотрудник</b>
+					</span>
+				</span>
+				<span id = 'datepicker' style = 'display: none;'>
+					<span>Диапазон дат: </span>
+					<input type="text" class="datepicker-here"/>
+				</span>
 			</div>
 		</div>
 		<div class = "stats__main__body">
-			<div class = "unit auth_form" data-step = "-1" v-show="activeState === -1">
-				<form id = "login_form" v-on:submit.prevent = "authMe($event)">
-					<input type = "text" name = "login" placeholder = "Login" v-model = "u_login"></input>
-					<input type = "password" name = "pwd" placeholder = "Password" v-model = "u_pwd"></input>
+			<div class = "unit auth_form" data-step = "-1" v-show="activeScreen === 'auth'">
+				<form id = "login_form" v-on:submit.prevent = "getMe(login,password,point,'start')">
+					<input autocomplete="name" type = "text" name = "login" placeholder = "Login" v-model = "login"></input>
+					<input autocomplete="password" type = "password" name = "pwd" placeholder = "Password" v-model = "password"></input>
 					<span class = "checkbox__persist">
 						<input type="checkbox" name="persist_here" value="Yes" style = "width: 20px;height: 20px;margin: auto 5px auto 0px;">
-						<label for = "persist_here">REMEMBER ME</label>
+						<label for = "persist_here">Оставаться в системе</label>
 					</span>
 					<input type = "submit" name = "go" value = "Начать"></input>
 				</form>
 			</div>
-			<div class = "unit" v-show = "activeState === 1">
+			<div class = "unit" v-show = "activeScreen === 'report'">
 				<div id = "reportControls">
 					<div class = 'report__pages__holder' style = "display: none;">
-						<span>Report Pages:</span>
 						<ul>
 							<li v-for = "i in reportPages" v-on:click = 'setReportPage(i.name, $event)' v-bind:id = "'bi_report_' + i.name">{{i.displayName}}</li>
 						</ul>
 					</div>
-					<div style = "display: flex; margin-left: auto;">
-						<a class = 'report__actions' id = "switch-report-mode" href="javascript:void(0)" v-on:click= = "switchModes()">П</a>
+					<div class = 'actions' style = "display: block; position: absolute; left: 100%; top: 0; border: 2px solid rgb(58, 98, 150); align-self: flex-end; border-left: none;">
+						<a v-if = 'userData.mode != "client"' class = 'report__actions' id = "switch-report-mode" href="javascript:void(0)" v-on:click = "switchModes()">П</a>
 						<a class = 'report__actions' id = "print-report" href="javascript:void(0)" onclick = "window.report.print()">П</a>
 						<a class = 'report__actions' id = "fullscreen-report" href="javascript:void(0)" onclick = "window.report.fullscreen()">Э</a>	
 					</div>
 				</div>				
-				<div id = "embedContainer" style = "overflow: hidden;"></div>
+				<div id = "embedContainer"></div>
 			</div>
+			<div class = 'phone_alert' style="display:none;">
+				<span>Для просмотра содержимого воспользуйтесь ПК</span>
+			</div>	
 		</div>
 	</div>
 </div>
 <div id = "auth_info" style = "display: none; overflow: hidden;"></div>
 <!-- Scripts -->
-<script src="js/vue.min.js"></script>
-<script src="js/pbi.extended.app.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+<script src="assets/js/powerbi.embed.js"></script>
 <script>
 	$(document).ready( () => {
-		Vue.set(auth_app, 'subject', 'APP_SUBJECT');
+		Vue.set(pbi_app, 'point', 'testing');
 	});
+	window.onload = function() {
+		addDatePicker();
+	};
 </script>
 </body>
 </html>
